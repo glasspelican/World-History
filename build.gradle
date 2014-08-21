@@ -36,6 +36,10 @@ version = "0.1.0"
 group= "k4unl.minecraft.blockLog" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "blockLog"
 
+dependencies {
+    compile "mysql:mysql-connector-java:5.1.17"
+
+}
 
 minecraft {
     version = "${project.ext.mcVersion}-10.13.0.1199"

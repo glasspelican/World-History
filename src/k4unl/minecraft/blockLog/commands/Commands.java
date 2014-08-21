@@ -1,4 +1,4 @@
-package k4unl.minecraft.pvpToggle.commands;
+package k4unl.minecraft.blockLog.commands;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
@@ -6,6 +6,6 @@ public class Commands {
 
 	
 	public static void init(FMLServerStartingEvent event){
-		//event.registerServerCommand(new CommandPVP());
+		event.registerServerCommand(new CommandShowAccess());
 	}
 }

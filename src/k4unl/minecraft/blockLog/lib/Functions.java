@@ -1,4 +1,4 @@
-package k4unl.minecraft.pvpToggle.lib;
+package k4unl.minecraft.blockLog.lib;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;

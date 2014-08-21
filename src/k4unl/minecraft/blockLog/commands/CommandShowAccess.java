@@ -1,0 +1,69 @@
+package k4unl.minecraft.blockLog.commands;
+
+
+import k4unl.minecraft.blockLog.BlockLog;
+import k4unl.minecraft.blockLog.lib.config.Config;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+
+import java.util.List;
+
+public class CommandShowAccess implements ICommand {
+
+    @Override
+    public String getCommandName() {
+
+        return "getaccess";
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+
+        return "getaccess. Then right click with any tool on a block or TE to get the last 10 events on that location.";
+    }
+
+    @Override
+    public List getCommandAliases() {
+
+        return null;
+    }
+
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
+        BlockLog.instance.addUserToNotLogList(sender.getCommandSenderName());
+        sender.addChatMessage(new ChatComponentText("You can now right click on a block that you want info about"));
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender){
+        if(sender instanceof EntityPlayerMP){
+            if(Config.isUserAMod(((EntityPlayerMP) sender).getDisplayName())){
+                return true;
+            }
+            return MinecraftServer.getServer().getConfigurationManager().func_152596_g(((EntityPlayerMP) sender).getGameProfile());
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+
+        return null;
+    }
+
+    @Override
+    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+
+        return false;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+
+        return 0;
+    }
+}

@@ -1,4 +1,4 @@
-package k4unl.minecraft.pvpToggle.lib.config;
+package k4unl.minecraft.blockLog.lib.config;
 
 public class ModInfo {
 	public static final String ID = "BlockLog";

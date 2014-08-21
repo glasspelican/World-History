@@ -1,4 +1,4 @@
-package k4unl.minecraft.pvpToggle.lib.config;
+package k4unl.minecraft.blockLog.lib.config;
 
 import net.minecraftforge.common.config.Configuration;
 
