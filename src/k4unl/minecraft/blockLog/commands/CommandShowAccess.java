@@ -16,13 +16,13 @@ public class CommandShowAccess implements ICommand {
     @Override
     public String getCommandName() {
 
-        return "getaccess";
+        return "showaccess";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
 
-        return "getaccess. Then right click with any tool on a block or TE to get the last 10 events on that location.";
+        return "showaccess. Then right click with any tool on a block or TE to get the last 10 events on that location.";
     }
 
     @Override
@@ -33,7 +33,11 @@ public class CommandShowAccess implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        BlockLog.instance.addUserToNotLogList(sender.getCommandSenderName());
+        int entries = 10;
+        if(args.length > 0){
+            entries = Integer.parseInt(args[0]);
+        }
+        BlockLog.instance.addUserToNotLogList(sender.getCommandSenderName(), entries);
         sender.addChatMessage(new ChatComponentText("You can now right click on a block that you want info about"));
     }
 

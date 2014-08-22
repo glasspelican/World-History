@@ -15,7 +15,9 @@ import k4unl.minecraft.blockLog.lib.config.ModInfo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Mod(
@@ -31,8 +33,8 @@ public class BlockLog {
     public static BlockLog instance;
 
     public static MySQL sqlConn;
-    private static List<String> doNotLogList = new ArrayList<String>();
-    private static List<String> helpers = new ArrayList<String>();
+    private static Map<String, Integer> doNotLogList = new HashMap<String, Integer>();
+    private static ArrayList<String>    helpers      = new ArrayList<String>();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -62,27 +64,32 @@ public class BlockLog {
 
     @EventHandler
     public void serverStart(FMLServerStartingEvent event) throws SQLException {
+
         sqlConn = new MySQL(Config.getString("host"), Config.getString("username"), Config.getString("password"), Config.getString("database"));
     }
 
     @EventHandler
     public void serverStop(FMLServerStoppingEvent event) {
 
-	}
+    }
 
-    public void addUserToNotLogList(String name){
-        if(!doNotLogList.contains(name)){
-            doNotLogList.add(name);
+    public void addUserToNotLogList(String name, int entries) {
+
+        if (!doNotLogList.containsKey(name)) {
+            doNotLogList.put(name, entries);
         }
     }
 
-    public boolean isUserOnNotLogList(String displayName) {
-
-        return doNotLogList.contains(displayName);
+    public int isUserOnNotLogList(String displayName) {
+        if(doNotLogList.containsKey(displayName)){
+            return doNotLogList.get(displayName);
+        }else{
+            return 0;
+        }
     }
 
     public void removeUserFromNotLogList(String name){
-        if(doNotLogList.contains(name)){
+        if(doNotLogList.containsKey(name)){
             doNotLogList.remove(name);
         }
     }
