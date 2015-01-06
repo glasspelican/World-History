@@ -15,16 +15,6 @@ buildscript {
     }
 }
 
-// define the properties file
-//ext.configFile = file "build.properties"
-
-//configFile.withReader {
-    // read config. it shall from now on be referenced as simply config or as project.config
-//    def prop = new Properties()
-//    prop.load(it)
-//    ext.config = new ConfigSlurper().parse prop
-//}
-
 apply plugin: 'forge'
 
 project.ext {
@@ -32,7 +22,7 @@ project.ext {
     mcVersion="1.7.10"
 }
 
-version = "0.1.0"
+version = project.ext.mcVersion + "-0.1." + project.ext.buildNum
 group= "k4unl.minecraft.blockLog" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "blockLog"
 
@@ -42,8 +32,7 @@ dependencies {
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-10.13.0.1199"
-    assetDir = "../minecraft/assets"
+    version = "${project.ext.mcVersion}-10.13.2.1230"
     replace "@VERSION@", project.version
 	replace "@BUILDNUM@", project.ext.buildNum
 }
@@ -86,6 +75,5 @@ processResources
 }
 
 jar {
-    appendix = "${project.ext.mcVersion}"
-    classifier = "${project.ext.buildNum}"
+    classifier = "universal"
 }

@@ -2,16 +2,12 @@ package k4unl.minecraft.blockLog.events;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import k4unl.minecraft.blockLog.BlockLog;
 import k4unl.minecraft.blockLog.lib.config.Config;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -35,14 +31,14 @@ public class EventHelper {
     public void PlayerInteractEvent(PlayerInteractEvent event){
         //4
         if(event.action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) && !event.world.isRemote){
-            if(BlockLog.instance.isUserOnNotLogList(event.entityPlayer.getDisplayName())){
+            if(BlockLog.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()) > 0){
                 try {
                     ResultSet rs = BlockLog.sqlConn.getQuery("SELECT * FROM `events` WHERE `x`='" + event.x + "' AND `y`='" + event.y + "' AND `z`='"
-                      + event.z + "' " + "AND `dimensionID`='" + event.world.provider.dimensionId + "' ORDER BY `id` DESC LIMIT 10");
+                      + event.z + "' " + "AND `dimensionID`='" + event.world.provider.dimensionId + "' ORDER BY `id` DESC LIMIT " + BlockLog.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()));
 
                     while(rs.next()){
                         String chat = "";
-                        chat += rs.getString("eventType"); //TODO: Make a method to translate this.
+                        chat += BlockLog.sqlConn.getActionType(rs.getInt("eventType")); //TODO: Make a method to translate this.
                         chat += ": ";
                         chat += rs.getString("time");
                         chat += " ";
@@ -51,7 +47,7 @@ public class EventHelper {
                         event.entityPlayer.addChatMessage(new ChatComponentText(chat));
                         event.setCanceled(true);
                     }
-                    BlockLog.instance.removeUserFromNotLogList(event.entityPlayer.getDisplayName());
+                    BlockLog.instance.removeUserFromNotLogList(event.entityPlayer.getGameProfile().getName());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -68,7 +64,7 @@ public class EventHelper {
                 values.add(event.y);
                 values.add(event.z);
                 values.add(event.world.provider.dimensionId);
-                values.add(event.entityPlayer.getDisplayName());
+                values.add(event.entityPlayer.getGameProfile().getName());
                 values.add(currentTimestamp);
                 values.add(event.world.getBlock(event.x, event.y, event.z).getUnlocalizedName());
 
@@ -96,7 +92,7 @@ public class EventHelper {
                 values.add(event.y);
                 values.add(event.z);
                 values.add(event.world.provider.dimensionId);
-                values.add(event.getPlayer().getDisplayName());
+                values.add(event.getPlayer().getGameProfile().getName());
                 values.add(currentTimestamp);
                 values.add(event.block.getUnlocalizedName());
 
@@ -112,7 +108,7 @@ public class EventHelper {
             values.add(event.y);
             values.add(event.z);
             values.add(event.world.provider.dimensionId);
-            values.add(event.getPlayer().getDisplayName());
+            values.add(event.getPlayer().getGameProfile().getName());
             values.add(currentTimestamp);
             values.add(event.block.getUnlocalizedName());
 

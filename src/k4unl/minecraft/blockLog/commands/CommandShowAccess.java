@@ -1,6 +1,5 @@
 package k4unl.minecraft.blockLog.commands;
 
-
 import k4unl.minecraft.blockLog.BlockLog;
 import k4unl.minecraft.blockLog.lib.config.Config;
 import net.minecraft.command.ICommand;
@@ -9,9 +8,16 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandShowAccess implements ICommand {
+
+    private List<String> aliases;
+    public CommandShowAccess(){
+        aliases = new ArrayList<String>();
+        aliases.add("sa");
+    }
 
     @Override
     public String getCommandName() {
@@ -28,7 +34,7 @@ public class CommandShowAccess implements ICommand {
     @Override
     public List getCommandAliases() {
 
-        return null;
+        return aliases;
     }
 
     @Override
