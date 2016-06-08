@@ -1,10 +1,6 @@
 package k4unl.minecraft.blockLog;
 
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.*;
 import k4unl.minecraft.blockLog.commands.Commands;
 import k4unl.minecraft.blockLog.events.EventHelper;
 import k4unl.minecraft.blockLog.lib.Log;
@@ -12,6 +8,8 @@ import k4unl.minecraft.blockLog.lib.MySQL;
 import k4unl.minecraft.blockLog.lib.config.Config;
 import k4unl.minecraft.blockLog.lib.config.ConfigHandler;
 import k4unl.minecraft.blockLog.lib.config.ModInfo;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,14 +27,14 @@ import java.util.Map;
 
 
 public class BlockLog {
-    @Instance(value = ModInfo.ID)
+    @Mod.Instance(value = ModInfo.ID)
     public static BlockLog instance;
 
     public static MySQL sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<String, Integer>();
     private static ArrayList<String>    helpers      = new ArrayList<String>();
 
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
         Log.init();
@@ -44,31 +42,31 @@ public class BlockLog {
 
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
 
         EventHelper.init();
     }
 
 
-    @EventHandler
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
 
         Commands.init(event);
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void serverStart(FMLServerStartingEvent event) throws SQLException {
 
         sqlConn = new MySQL(Config.getString("host"), Config.getString("username"), Config.getString("password"), Config.getString("database"));
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void serverStop(FMLServerStoppingEvent event) {
 
     }
