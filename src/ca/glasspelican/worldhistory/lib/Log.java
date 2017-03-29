@@ -1,6 +1,6 @@
-package k4unl.minecraft.blockLog.lib;
+package ca.glasspelican.worldhistory.lib;
 
-import k4unl.minecraft.blockLog.lib.config.ModInfo;
+import ca.glasspelican.worldhistory.lib.config.ModInfo;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

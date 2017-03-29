@@ -1,22 +1,21 @@
-package k4unl.minecraft.blockLog;
+package ca.glasspelican.worldhistory;
 
 
+import ca.glasspelican.worldhistory.commands.Commands;
+import ca.glasspelican.worldhistory.events.EventHelper;
+import ca.glasspelican.worldhistory.lib.Log;
+import ca.glasspelican.worldhistory.lib.MySQL;
+import ca.glasspelican.worldhistory.lib.config.ConfigHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.*;
-import k4unl.minecraft.blockLog.commands.Commands;
-import k4unl.minecraft.blockLog.events.EventHelper;
-import k4unl.minecraft.blockLog.lib.Log;
-import k4unl.minecraft.blockLog.lib.MySQL;
-import k4unl.minecraft.blockLog.lib.config.Config;
-import k4unl.minecraft.blockLog.lib.config.ConfigHandler;
-import k4unl.minecraft.blockLog.lib.config.ModInfo;
+import ca.glasspelican.worldhistory.lib.config.Config;
+import ca.glasspelican.worldhistory.lib.config.ModInfo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -28,9 +27,9 @@ import java.util.Map;
 )
 
 
-public class BlockLog {
+public class WorldHistory {
     @Instance(value = ModInfo.ID)
-    public static BlockLog instance;
+    public static WorldHistory instance;
 
     public static MySQL sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<String, Integer>();

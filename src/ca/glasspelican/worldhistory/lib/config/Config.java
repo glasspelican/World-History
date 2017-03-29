@@ -1,4 +1,4 @@
-package k4unl.minecraft.blockLog.lib.config;
+package ca.glasspelican.worldhistory.lib.config;
 
 import net.minecraftforge.common.config.Configuration;
 

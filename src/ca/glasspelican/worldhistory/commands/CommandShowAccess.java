@@ -1,7 +1,7 @@
-package k4unl.minecraft.blockLog.commands;
+package ca.glasspelican.worldhistory.commands;
 
-import k4unl.minecraft.blockLog.BlockLog;
-import k4unl.minecraft.blockLog.lib.config.Config;
+import ca.glasspelican.worldhistory.WorldHistory;
+import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -43,7 +43,7 @@ public class CommandShowAccess implements ICommand {
         if(args.length > 0){
             entries = Integer.parseInt(args[0]);
         }
-        BlockLog.instance.addUserToNotLogList(sender.getCommandSenderName(), entries);
+        WorldHistory.instance.addUserToNotLogList(sender.getCommandSenderName(), entries);
         sender.addChatMessage(new ChatComponentText("You can now right click on a block that you want info about"));
     }
 

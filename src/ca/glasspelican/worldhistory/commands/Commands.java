@@ -1,4 +1,4 @@
-package k4unl.minecraft.blockLog.commands;
+package ca.glasspelican.worldhistory.commands;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 

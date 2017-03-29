@@ -1,9 +1,9 @@
-package k4unl.minecraft.blockLog.events;
+package ca.glasspelican.worldhistory.events;
 
+import ca.glasspelican.worldhistory.WorldHistory;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import k4unl.minecraft.blockLog.BlockLog;
-import k4unl.minecraft.blockLog.lib.config.Config;
+import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ChatComponentText;
@@ -31,14 +31,14 @@ public class EventHelper {
     public void PlayerInteractEvent(PlayerInteractEvent event){
         //4
         if(event.action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) && !event.world.isRemote){
-            if(BlockLog.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()) > 0){
+            if(WorldHistory.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()) > 0){
                 try {
-                    ResultSet rs = BlockLog.sqlConn.getQuery("SELECT * FROM `events` WHERE `x`='" + event.x + "' AND `y`='" + event.y + "' AND `z`='"
-                      + event.z + "' " + "AND `dimensionID`='" + event.world.provider.dimensionId + "' ORDER BY `id` DESC LIMIT " + BlockLog.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()));
+                    ResultSet rs = WorldHistory.sqlConn.getQuery("SELECT * FROM `events` WHERE `x`='" + event.x + "' AND `y`='" + event.y + "' AND `z`='"
+                      + event.z + "' " + "AND `dimensionID`='" + event.world.provider.dimensionId + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()));
 
                     while(rs.next()){
                         String chat = "";
-                        chat += BlockLog.sqlConn.getActionType(rs.getInt("eventType")); //TODO: Make a method to translate this.
+                        chat += WorldHistory.sqlConn.getActionType(rs.getInt("eventType")); //TODO: Make a method to translate this.
                         chat += ": ";
                         chat += rs.getString("time");
                         chat += " ";
@@ -47,7 +47,7 @@ public class EventHelper {
                         event.entityPlayer.addChatMessage(new ChatComponentText(chat));
                         event.setCanceled(true);
                     }
-                    BlockLog.instance.removeUserFromNotLogList(event.entityPlayer.getGameProfile().getName());
+                    WorldHistory.instance.removeUserFromNotLogList(event.entityPlayer.getGameProfile().getName());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -68,7 +68,7 @@ public class EventHelper {
                 values.add(currentTimestamp);
                 values.add(event.world.getBlock(event.x, event.y, event.z).getUnlocalizedName());
 
-                BlockLog.sqlConn.insert("events", values);
+                WorldHistory.sqlConn.insert("events", values);
             }
         }
     }
@@ -96,7 +96,7 @@ public class EventHelper {
                 values.add(currentTimestamp);
                 values.add(event.block.getUnlocalizedName());
 
-                BlockLog.sqlConn.insert("events", values);
+                WorldHistory.sqlConn.insert("events", values);
             }
         }
         if(event.block instanceof ITileEntityProvider){
@@ -112,7 +112,7 @@ public class EventHelper {
             values.add(currentTimestamp);
             values.add(event.block.getUnlocalizedName());
 
-            BlockLog.sqlConn.insert("events", values);
+            WorldHistory.sqlConn.insert("events", values);
         }
     }
 

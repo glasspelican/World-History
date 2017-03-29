@@ -1,4 +1,4 @@
-package k4unl.minecraft.blockLog.lib;
+package ca.glasspelican.worldhistory.lib;
 
 import java.sql.*;
 import java.util.HashMap;
