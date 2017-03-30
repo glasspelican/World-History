@@ -1,9 +1,9 @@
 package ca.glasspelican.worldhistory.events;
 
 import ca.glasspelican.worldhistory.WorldHistory;
+import ca.glasspelican.worldhistory.lib.config.Config;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ChatComponentText;
@@ -22,21 +22,21 @@ import java.util.List;
 public class EventHelper {
 
 
-	public static void init(){
-		MinecraftForge.EVENT_BUS.register(new EventHelper());
-		FMLCommonHandler.instance().bus().register(new EventHelper());
-	}
+    public static void init() {
+        MinecraftForge.EVENT_BUS.register(new EventHelper());
+        FMLCommonHandler.instance().bus().register(new EventHelper());
+    }
 
     @SubscribeEvent
-    public void PlayerInteractEvent(PlayerInteractEvent event){
+    public void PlayerInteractEvent(PlayerInteractEvent event) {
         //4
-        if(event.action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) && !event.world.isRemote){
-            if(WorldHistory.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()) > 0){
+        if (event.action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) && !event.world.isRemote) {
+            if (WorldHistory.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()) > 0) {
                 try {
                     ResultSet rs = WorldHistory.sqlConn.getQuery("SELECT * FROM `events` WHERE `x`='" + event.x + "' AND `y`='" + event.y + "' AND `z`='"
-                      + event.z + "' " + "AND `dimensionID`='" + event.world.provider.dimensionId + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()));
+                            + event.z + "' " + "AND `dimensionID`='" + event.world.provider.dimensionId + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.entityPlayer.getGameProfile().getName()));
 
-                    while(rs.next()){
+                    while (rs.next()) {
                         String chat = "";
                         chat += WorldHistory.sqlConn.getActionType(rs.getInt("eventType")); //TODO: Make a method to translate this.
                         chat += ": ";
@@ -51,13 +51,13 @@ public class EventHelper {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
                 List<Object> values = new ArrayList<Object>();
                 values.add(null);
-                if(event.world.getTileEntity(event.x, event.y, event.z) instanceof IInventory){
+                if (event.world.getTileEntity(event.x, event.y, event.z) instanceof IInventory) {
                     values.add(3);
-                }else{
+                } else {
                     values.add(4);
                 }
                 values.add(event.x);
@@ -74,16 +74,16 @@ public class EventHelper {
     }
 
     @SubscribeEvent
-    public void PlayerOpenContainerEvent(PlayerOpenContainerEvent event){
+    public void PlayerOpenContainerEvent(PlayerOpenContainerEvent event) {
         //3
 
     }
 
     @SubscribeEvent
-    public void BreakEvent(BlockEvent.BreakEvent event){
+    public void BreakEvent(BlockEvent.BreakEvent event) {
         //2 and 1
-        if(Config.getBool("logBlockBreak")){
-            if(!(event.block instanceof ITileEntityProvider)){
+        if (Config.getBool("logBlockBreak")) {
+            if (!(event.block instanceof ITileEntityProvider)) {
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
                 List<Object> values = new ArrayList<Object>();
                 values.add(null);
@@ -99,7 +99,7 @@ public class EventHelper {
                 WorldHistory.sqlConn.insert("events", values);
             }
         }
-        if(event.block instanceof ITileEntityProvider){
+        if (event.block instanceof ITileEntityProvider) {
             Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
             List<Object> values = new ArrayList<Object>();
             values.add(null);

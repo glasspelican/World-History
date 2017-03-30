@@ -5,13 +5,13 @@ import ca.glasspelican.worldhistory.commands.Commands;
 import ca.glasspelican.worldhistory.events.EventHelper;
 import ca.glasspelican.worldhistory.lib.Log;
 import ca.glasspelican.worldhistory.lib.MySQL;
+import ca.glasspelican.worldhistory.lib.config.Config;
 import ca.glasspelican.worldhistory.lib.config.ConfigHandler;
+import ca.glasspelican.worldhistory.lib.config.ModInfo;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.*;
-import ca.glasspelican.worldhistory.lib.config.Config;
-import ca.glasspelican.worldhistory.lib.config.ModInfo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import java.util.Map;
 
 
 @Mod(
-	modid = ModInfo.ID,
-	name = ModInfo.NAME,
-	version = ModInfo.VERSION,
-	acceptableRemoteVersions="*"
+        modid = ModInfo.ID,
+        name = ModInfo.NAME,
+        version = ModInfo.VERSION,
+        acceptableRemoteVersions = "*"
 )
 
 
@@ -33,7 +33,7 @@ public class WorldHistory {
 
     public static MySQL sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<String, Integer>();
-    private static ArrayList<String>    helpers      = new ArrayList<String>();
+    private static ArrayList<String> helpers = new ArrayList<String>();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -80,15 +80,15 @@ public class WorldHistory {
     }
 
     public int isUserOnNotLogList(String displayName) {
-        if(doNotLogList.containsKey(displayName)){
+        if (doNotLogList.containsKey(displayName)) {
             return doNotLogList.get(displayName);
-        }else{
+        } else {
             return 0;
         }
     }
 
-    public void removeUserFromNotLogList(String name){
-        if(doNotLogList.containsKey(name)){
+    public void removeUserFromNotLogList(String name) {
+        if (doNotLogList.containsKey(name)) {
             doNotLogList.remove(name);
         }
     }

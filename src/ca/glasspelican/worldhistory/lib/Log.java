@@ -21,10 +21,10 @@ public class Log {
     public static void error(String message) {
 
         logger.log(Level.ERROR, message);
-	}
-	
-	public static void warning(String message){
-		logger.log(Level.WARN, message);
-	}
-	
+    }
+
+    public static void warning(String message) {
+        logger.log(Level.WARN, message);
+    }
+
 }

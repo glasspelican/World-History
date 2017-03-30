@@ -14,7 +14,8 @@ import java.util.List;
 public class CommandShowAccess implements ICommand {
 
     private List<String> aliases;
-    public CommandShowAccess(){
+
+    public CommandShowAccess() {
         aliases = new ArrayList<String>();
         aliases.add("sa");
     }
@@ -40,7 +41,7 @@ public class CommandShowAccess implements ICommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         int entries = 10;
-        if(args.length > 0){
+        if (args.length > 0) {
             entries = Integer.parseInt(args[0]);
         }
         WorldHistory.instance.addUserToNotLogList(sender.getCommandSenderName(), entries);
@@ -48,9 +49,9 @@ public class CommandShowAccess implements ICommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender){
-        if(sender instanceof EntityPlayerMP){
-            if(Config.isUserAMod(((EntityPlayerMP) sender).getDisplayName())){
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        if (sender instanceof EntityPlayerMP) {
+            if (Config.isUserAMod(((EntityPlayerMP) sender).getDisplayName())) {
                 return true;
             }
             return MinecraftServer.getServer().getConfigurationManager().func_152596_g(((EntityPlayerMP) sender).getGameProfile());
