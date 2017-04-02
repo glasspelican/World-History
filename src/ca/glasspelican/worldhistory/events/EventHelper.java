@@ -2,8 +2,8 @@ package ca.glasspelican.worldhistory.events;
 
 import ca.glasspelican.worldhistory.WorldHistory;
 import ca.glasspelican.worldhistory.lib.config.Config;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ChatComponentText;

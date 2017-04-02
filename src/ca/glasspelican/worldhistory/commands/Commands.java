@@ -1,6 +1,6 @@
 package ca.glasspelican.worldhistory.commands;
 
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 public class Commands {
 

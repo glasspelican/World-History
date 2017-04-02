@@ -8,10 +8,10 @@ import ca.glasspelican.worldhistory.lib.MySQL;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import ca.glasspelican.worldhistory.lib.config.ConfigHandler;
 import ca.glasspelican.worldhistory.lib.config.ModInfo;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.*;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
