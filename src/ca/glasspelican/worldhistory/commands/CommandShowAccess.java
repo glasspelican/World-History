@@ -100,21 +100,9 @@ public class CommandShowAccess implements ICommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-
-        return null;
-    }
-
-    @Override
     public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
 
         return false;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-
-        return 0;
     }
 
     /**
