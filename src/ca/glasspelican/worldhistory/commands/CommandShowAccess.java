@@ -50,7 +50,12 @@ public class CommandShowAccess implements ICommand {
      */
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-
+        int entries = 10;
+        if (args.length > 0) {
+            entries = Integer.parseInt(args[0]);
+        }
+        WorldHistory.instance.addUserToNotLogList(sender.getName(), entries);
+        sender.addChatMessage(new TextComponentString("You can now right click on a block that you want info about"));
     }
 
     /**
@@ -61,7 +66,7 @@ public class CommandShowAccess implements ICommand {
      */
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return false;
+        return !(sender instanceof EntityPlayerMP) || Config.isUserAMod(((EntityPlayerMP) sender).getName());
     }
 
     /**
@@ -75,28 +80,6 @@ public class CommandShowAccess implements ICommand {
     @Override
     public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         return null;
-    }
-
-    @Override
-    public void processCommand(ICommandSender sender, String[] args) {
-        int entries = 10;
-        if (args.length > 0) {
-            entries = Integer.parseInt(args[0]);
-        }
-        WorldHistory.instance.addUserToNotLogList(sender.getName(), entries);
-        sender.addChatMessage(new TextComponentString("You can now right click on a block that you want info about"));
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        if (sender instanceof EntityPlayerMP) {
-            if (Config.isUserAMod(((EntityPlayerMP) sender).getName())) {
-                return true;
-            }
-            return MinecraftServer.getServer().getConfigurationManager().func_152596_g(((EntityPlayerMP) sender).getGameProfile());
-        } else {
-            return true;
-        }
     }
 
     @Override
