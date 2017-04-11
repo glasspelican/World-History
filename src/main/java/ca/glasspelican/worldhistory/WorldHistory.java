@@ -70,7 +70,7 @@ public class WorldHistory {
 
     @EventHandler
     public void serverStop(FMLServerStoppingEvent event) {
-
+        sqlConn.close();
     }
 
     public void addUserToNotLogList(String name, int entries) {

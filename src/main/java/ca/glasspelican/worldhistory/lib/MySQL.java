@@ -76,4 +76,12 @@ public class MySQL {
         }
         return false;
     }
+
+    public void close() {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            Log.error(e.getLocalizedMessage());
+        }
+    }
 }
