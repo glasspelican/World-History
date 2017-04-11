@@ -86,11 +86,11 @@ public class EventHelper {
         }
     }
 
-    private void BlockBreak(BlockEvent.BreakEvent event, int value){
+    private void BlockBreak(BlockEvent.BreakEvent event, int eventType){
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         List<Object> values = new ArrayList<>();
         values.add(null);
-        values.add(value);
+        values.add(eventType);
         values.add(event.getPos().getX());
         values.add(event.getPos().getY());
         values.add(event.getPos().getZ());
