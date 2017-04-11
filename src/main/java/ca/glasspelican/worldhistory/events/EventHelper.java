@@ -79,39 +79,27 @@ public class EventHelper {
 
     @SubscribeEvent
     public void BreakEvent(BlockEvent.BreakEvent event) {
-        //2 and 1
-        if (Config.getBool("logBlockBreak")) {
-            if (!(event.getState() instanceof ITileEntityProvider)) {
-                Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-                List<Object> values = new ArrayList<Object>();
-                values.add(null);
-                values.add(1);
-                values.add(event.getPos().getX());
-                values.add(event.getPos().getY());
-                values.add(event.getPos().getZ());
-                values.add(event.getWorld().provider.getDimension());
-                values.add(event.getPlayer().getGameProfile().getName());
-                values.add(currentTimestamp);
-                values.add(event.getState().getBlock().getUnlocalizedName());
-
-                WorldHistory.getSqlConn().insert("events", values);
-            }
-        }
         if (event.getState().getBlock() instanceof ITileEntityProvider) {
-            Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-            List<Object> values = new ArrayList<Object>();
-            values.add(null);
-            values.add(2);
-            values.add(event.getPos().getX());
-            values.add(event.getPos().getY());
-            values.add(event.getPos().getZ());
-            values.add(event.getWorld().provider.getDimension());
-            values.add(event.getPlayer().getGameProfile().getName());
-            values.add(currentTimestamp);
-            values.add(event.getState().getBlock().getUnlocalizedName());
-
-            WorldHistory.getSqlConn().insert("events", values);
+            BlockBreak(event,2);
+        } else if (Config.getBool("logBlockBreak")){
+            BlockBreak(event,1);
         }
+    }
+
+    private void BlockBreak(BlockEvent.BreakEvent event, int value){
+        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+        List<Object> values = new ArrayList<>();
+        values.add(null);
+        values.add(value);
+        values.add(event.getPos().getX());
+        values.add(event.getPos().getY());
+        values.add(event.getPos().getZ());
+        values.add(event.getWorld().provider.getDimension());
+        values.add(event.getPlayer().getGameProfile().getName());
+        values.add(currentTimestamp);
+        values.add(event.getState().getBlock().getUnlocalizedName());
+
+        WorldHistory.getSqlConn().insert("events", values);
     }
 
 

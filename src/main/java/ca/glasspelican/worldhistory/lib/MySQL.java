@@ -10,7 +10,7 @@ public class MySQL {
     private Connection con = null;
     private Statement st = null;
 
-    private Map<Integer, String> actionTypes = new HashMap<Integer, String>();
+    private Map<Integer, String> actionTypes = new HashMap<>();
 
     public MySQL(String hostName, String userName, String password, String dbName) throws SQLException {
 
@@ -60,7 +60,7 @@ public class MySQL {
 
         StringBuilder q = new StringBuilder("INSERT INTO " + table + " VALUES (?");
 
-        for (Object value : values) q.append(",?");
+        for (Object ignored : values) q.append(",?");
 
         q.append(")");
 
