@@ -9,7 +9,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.sql.ResultSet;
@@ -24,7 +23,6 @@ public class EventHelper {
 
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new EventHelper());
-        FMLCommonHandler.instance().bus().register(new EventHelper());
     }
 
     @SubscribeEvent
@@ -33,12 +31,12 @@ public class EventHelper {
         if ((event instanceof PlayerInteractEvent.RightClickBlock) && !event.getWorld().isRemote) {
             if (WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getGameProfile().getName()) > 0) {
                 try {
-                    ResultSet resultSet = WorldHistory.sqlConn.getQuery("SELECT * FROM `events` WHERE `x`='" + event.getPos().getX() + "' AND `y`='" + event.getPos().getY() + "' AND `z`='"
+                    ResultSet resultSet = WorldHistory.getSqlConn().getQuery("SELECT * FROM `events` WHERE `x`='" + event.getPos().getX() + "' AND `y`='" + event.getPos().getY() + "' AND `z`='"
                             + event.getPos().getZ() + "' " + "AND `dimensionID`='" + event.getWorld().provider.getDimension() + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getName()));
 
                     while (resultSet.next()) {
                         String chat = "";
-                        chat += WorldHistory.sqlConn.getActionType(resultSet.getInt("eventType")); //TODO: Make a method to translate this.
+                        chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType")); //TODO: Make a method to translate this.
                         chat += ": ";
                         chat += resultSet.getString("time");
                         chat += " ";
@@ -68,7 +66,7 @@ public class EventHelper {
                 values.add(currentTimestamp);
                 values.add(event.getWorld().getBlockState(event.getPos()).getBlock().getUnlocalizedName());
 
-                WorldHistory.sqlConn.insert("events", values);
+                WorldHistory.getSqlConn().insert("events", values);
             }
         }
     }
@@ -96,7 +94,7 @@ public class EventHelper {
                 values.add(currentTimestamp);
                 values.add(event.getState().getBlock().getUnlocalizedName());
 
-                WorldHistory.sqlConn.insert("events", values);
+                WorldHistory.getSqlConn().insert("events", values);
             }
         }
         if (event.getState().getBlock() instanceof ITileEntityProvider) {
@@ -112,7 +110,7 @@ public class EventHelper {
             values.add(currentTimestamp);
             values.add(event.getState().getBlock().getUnlocalizedName());
 
-            WorldHistory.sqlConn.insert("events", values);
+            WorldHistory.getSqlConn().insert("events", values);
         }
     }
 

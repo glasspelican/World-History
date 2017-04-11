@@ -20,7 +20,7 @@ public class MySQL {
 
             st = con.createStatement();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error(e.getLocalizedMessage());
             throw e;
 
         }
@@ -36,7 +36,7 @@ public class MySQL {
             }
             rs.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error(e.getLocalizedMessage());
         }
     }
 
@@ -57,14 +57,14 @@ public class MySQL {
     }
 
     public boolean insert(String table, List<Object> values) {
-        try {
-            String q = "INSERT INTO " + table + " VALUES (?";
 
-            for (int i = 1; i < values.size(); i++) {
-                q += ",?";
-            }
-            PreparedStatement ps = con.prepareStatement(q + ")");
+        StringBuilder q = new StringBuilder("INSERT INTO " + table + " VALUES (?");
 
+        for (Object value : values) q.append(",?");
+
+        q.append(")");
+
+        try (PreparedStatement ps = con.prepareStatement(q.toString())) {
             int count = 1;
             for (Object value : values) {
                 ps.setObject(count, value);
@@ -72,7 +72,7 @@ public class MySQL {
             }
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error(e.getLocalizedMessage());
         }
         return false;
     }

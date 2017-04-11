@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +29,12 @@ import java.util.Map;
 public class WorldHistory {
     @Instance(value = ModInfo.ID)
     public static WorldHistory instance;
-
-    public static MySQL sqlConn;
+    private static MySQL sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<String, Integer>();
-    private static ArrayList<String> helpers = new ArrayList<String>();
+
+    public static MySQL getSqlConn() {
+        return sqlConn;
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
