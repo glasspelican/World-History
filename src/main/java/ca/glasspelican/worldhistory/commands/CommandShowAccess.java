@@ -17,7 +17,7 @@ public class CommandShowAccess extends CommandBase {
     private List<String> aliases;
 
     public CommandShowAccess() {
-        aliases = new ArrayList<String>();
+        aliases = new ArrayList<>();
         aliases.add("sa");
     }
 

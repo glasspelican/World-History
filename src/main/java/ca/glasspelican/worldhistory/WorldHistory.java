@@ -30,7 +30,7 @@ public class WorldHistory {
     @Instance(value = ModInfo.ID)
     public static WorldHistory instance;
     private static MySQL sqlConn;
-    private static Map<String, Integer> doNotLogList = new HashMap<String, Integer>();
+    private static Map<String, Integer> doNotLogList = new HashMap<>();
 
     public static MySQL getSqlConn() {
         return sqlConn;

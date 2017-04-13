@@ -18,9 +18,14 @@ public class Log {
         logger.log(Level.INFO, message);
     }
 
+
     public static void error(String message) {
 
         logger.log(Level.ERROR, message);
+    }
+
+    public static void error(Exception exception) {
+        error(exception.toString());
     }
 
     public static void warning(String message) {

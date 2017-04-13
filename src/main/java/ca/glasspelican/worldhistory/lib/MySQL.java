@@ -20,9 +20,8 @@ public class MySQL {
 
             st = con.createStatement();
         } catch (SQLException e) {
-            Log.error(e.getLocalizedMessage());
+            Log.error(e);
             throw e;
-
         }
     }
 
@@ -36,7 +35,7 @@ public class MySQL {
             }
             rs.close();
         } catch (SQLException e) {
-            Log.error(e.getLocalizedMessage());
+            Log.error(e);
         }
     }
 
@@ -72,7 +71,7 @@ public class MySQL {
             }
             ps.executeUpdate();
         } catch (SQLException e) {
-            Log.error(e.getLocalizedMessage());
+            Log.error(e);
         }
         return false;
     }
@@ -81,7 +80,7 @@ public class MySQL {
         try {
             con.close();
         } catch (SQLException e) {
-            Log.error(e.getLocalizedMessage());
+            Log.error(e);
         }
     }
 }

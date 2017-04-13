@@ -1,6 +1,7 @@
 package ca.glasspelican.worldhistory.events;
 
 import ca.glasspelican.worldhistory.WorldHistory;
+import ca.glasspelican.worldhistory.lib.Log;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.inventory.IInventory;
@@ -47,7 +48,7 @@ public class EventHelper {
                     }
                     WorldHistory.instance.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Log.error(e);
                 }
             } else {
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
