@@ -4,7 +4,9 @@ import ca.glasspelican.worldhistory.WorldHistory;
 import ca.glasspelican.worldhistory.lib.Log;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
@@ -51,23 +53,13 @@ public class EventHelper {
                     Log.error(e);
                 }
             } else {
-                Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-                List<Object> values = new ArrayList<Object>();
-                values.add(null);
-                if (event.getWorld().getTileEntity(event.getPos()) instanceof IInventory) {
-                    values.add(3);
-                } else {
-                    values.add(4);
-                }
-                values.add(event.getPos().getX());
-                values.add(event.getPos().getY());
-                values.add(event.getPos().getZ());
-                values.add(event.getWorld().provider.getDimension());
-                values.add(event.getEntityPlayer().getGameProfile().getName());
-                values.add(currentTimestamp);
-                values.add(event.getWorld().getBlockState(event.getPos()).getBlock().getUnlocalizedName());
 
-                WorldHistory.getSqlConn().insert("events", values);
+                BlockEvent(
+                        event.getWorld().getTileEntity(event.getPos()) instanceof IInventory ? 3 : 4,
+                        event.getPos(),
+                        event.getEntityPlayer(),
+                        event.getWorld().getBlockState(event.getPos()).getBlock().getUnlocalizedName()
+                );
             }
         }
     }
@@ -81,24 +73,24 @@ public class EventHelper {
     @SubscribeEvent
     public void BreakEvent(BlockEvent.BreakEvent event) {
         if (event.getState().getBlock() instanceof ITileEntityProvider) {
-            BlockBreak(event,2);
-        } else if (Config.getBool("logBlockBreak")){
-            BlockBreak(event,1);
+            BlockEvent(2, event.getPos(), event.getPlayer(), event.getState().getBlock().getUnlocalizedName());
+        } else if (Config.getBool("logBlockBreak")) {
+            BlockEvent(1, event.getPos(), event.getPlayer(), event.getState().getBlock().getUnlocalizedName());
         }
     }
 
-    private void BlockBreak(BlockEvent.BreakEvent event, int eventType){
+    private void BlockEvent(int eventType, BlockPos blockPos, EntityPlayer entityPlayer, String blockName) {
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         List<Object> values = new ArrayList<>();
         values.add(null);
         values.add(eventType);
-        values.add(event.getPos().getX());
-        values.add(event.getPos().getY());
-        values.add(event.getPos().getZ());
-        values.add(event.getWorld().provider.getDimension());
-        values.add(event.getPlayer().getGameProfile().getName());
+        values.add(blockPos.getX());
+        values.add(blockPos.getY());
+        values.add(blockPos.getZ());
+        values.add(entityPlayer.getEntityWorld().provider.getDimension());
+        values.add(entityPlayer.getGameProfile().getName());
         values.add(currentTimestamp);
-        values.add(event.getState().getBlock().getUnlocalizedName());
+        values.add(blockName);
 
         WorldHistory.getSqlConn().insert("events", values);
     }
