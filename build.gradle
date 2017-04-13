@@ -28,7 +28,7 @@ group = "ca.glasspelican.worldhistory"
 archivesBaseName = "worldHistory"
 
 dependencies {
-    compile "mysql:mysql-connector-java:5.1.17"
+    compile "mysql:mysql-connector-java:6.0.6"
 
 }
 
