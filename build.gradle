@@ -19,7 +19,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 project.ext {
-    buildNum = System.getenv("BUILD_NUMBER")
+    buildNum = System.getenv("CIRCLE_BUILD_NUM")
     mcVersion = "1.10.2"
 }
 
