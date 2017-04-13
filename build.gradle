@@ -10,17 +10,33 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            url = "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
 
 project.ext {
     buildNum = System.getenv("CIRCLE_BUILD_NUM")
     mcVersion = "1.10.2"
+    curseApiKey = System.getenv("CURSE_API_KEY") ?: ""
+    curseRelease = System.getenv("CIRCLE_RELEASE_TYPE") ?: "alpha"
+}
+
+def getLastCommit = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'log', '-1', '--pretty=%B'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }
 
 version = project.ext.mcVersion + "-0.1." + project.ext.buildNum
@@ -29,7 +45,6 @@ archivesBaseName = "worldHistory"
 
 dependencies {
     compile "mysql:mysql-connector-java:6.0.6"
-
 }
 
 sourceCompatibility = targetCompatibility = "1.7"
@@ -44,6 +59,15 @@ minecraft {
 
     runDir = "run"
     mappings = "snapshot_20161111"
+}
+
+curseforge {
+    apiKey = project.ext.curseApiKey
+    project {
+        id = '265169'
+        releaseType = project.ext.curseRelease
+        changelog = getLastCommit()
+    }
 }
 
 processResources {
