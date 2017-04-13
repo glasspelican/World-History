@@ -1,7 +1,3 @@
 dependencies:
     override:
-        - gradle setupciworkspace
-
-machine:
-    gradle:
-        version: 2.3
+        - ./gradlew setupciworkspace

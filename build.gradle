@@ -38,7 +38,7 @@ compileJava {
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-12.18.3.2254"
+    version = "${project.ext.mcVersion}-12.18.3.2281"
     replace "@VERSION@", project.version
     replace "@BUILDNUM@", project.ext.buildNum
 
