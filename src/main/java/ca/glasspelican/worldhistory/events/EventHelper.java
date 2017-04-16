@@ -1,13 +1,13 @@
 package ca.glasspelican.worldhistory.events;
 
 import ca.glasspelican.worldhistory.WorldHistory;
+import ca.glasspelican.worldhistory.lib.Chat;
 import ca.glasspelican.worldhistory.lib.Log;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -45,7 +45,7 @@ public class EventHelper {
                         chat += " ";
                         chat += resultSet.getString("user");
 
-                        event.getEntityPlayer().addChatMessage(new TextComponentString(chat));
+                        Chat.showMessage(event.getEntityPlayer(),chat);
                         event.setCanceled(true);
                     }
                     WorldHistory.instance.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());

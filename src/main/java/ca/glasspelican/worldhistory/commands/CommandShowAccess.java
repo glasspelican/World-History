@@ -1,13 +1,13 @@
 package ca.glasspelican.worldhistory.commands;
 
 import ca.glasspelican.worldhistory.WorldHistory;
+import ca.glasspelican.worldhistory.lib.Chat;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class CommandShowAccess extends CommandBase {
             entries = Integer.parseInt(args[0]);
         }
         WorldHistory.instance.addUserToNotLogList(sender.getName(), entries);
-        sender.addChatMessage(new TextComponentString("You can now right click on a block that you want info about"));
+        Chat.showMessage(sender,"You can now right click on a block that you want info about");
     }
 
     /**
