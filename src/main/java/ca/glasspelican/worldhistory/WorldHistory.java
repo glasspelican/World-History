@@ -31,7 +31,6 @@ import java.util.Map;
 
 public class WorldHistory {
     @Instance(value = ModInfo.ID)
-    public static WorldHistory instance;
     private static Database sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<>();
 
@@ -70,14 +69,14 @@ public class WorldHistory {
         sqlConn.close();
     }
 
-    public void addUserToNotLogList(String name, int entries) {
+    public static void addUserToNotLogList(String name, int entries) {
 
         if (!doNotLogList.containsKey(name)) {
             doNotLogList.put(name, entries);
         }
     }
 
-    public int isUserOnNotLogList(String displayName) {
+    public static int isUserOnNotLogList(String displayName) {
         if (doNotLogList.containsKey(displayName)) {
             return doNotLogList.get(displayName);
         } else {
@@ -85,7 +84,7 @@ public class WorldHistory {
         }
     }
 
-    public void removeUserFromNotLogList(String name) {
+    public static void removeUserFromNotLogList(String name) {
         if (doNotLogList.containsKey(name)) {
             doNotLogList.remove(name);
         }
