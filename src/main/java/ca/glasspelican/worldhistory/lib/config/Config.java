@@ -8,7 +8,7 @@ import java.util.List;
 public class Config {
 
     private static final List<configOption> configOptions = new ArrayList<>();
-    private static String[] modUsers;
+    private static String[] modUsers; //TODO: Make me something that is better configurable and hooks in with colorChat
 
     static {
         configOptions.add(new configOption("useEmbeddedDatabase", false).setCategory("Database"));

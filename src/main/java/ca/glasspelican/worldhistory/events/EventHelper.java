@@ -32,14 +32,14 @@ public class EventHelper {
     public void PlayerInteractEvent(PlayerInteractEvent event) {
         //4
         if ((event instanceof PlayerInteractEvent.RightClickBlock) && !event.getWorld().isRemote) {
-            if (WorldHistory.isUserOnNotLogList(event.getEntityPlayer().getGameProfile().getName()) > 0) {
+            if (WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getGameProfile().getName()) > 0) {
                 try {
                     ResultSet resultSet = WorldHistory.getSqlConn().getQuery("SELECT * FROM `events` WHERE `x`='" + event.getPos().getX() + "' AND `y`='" + event.getPos().getY() + "' AND `z`='"
-                            + event.getPos().getZ() + "' " + "AND `dimensionID`='" + event.getWorld().provider.getDimension() + "' ORDER BY `id` DESC LIMIT " + WorldHistory.isUserOnNotLogList(event.getEntityPlayer().getName()));
+                            + event.getPos().getZ() + "' " + "AND `dimensionID`='" + event.getWorld().provider.getDimension() + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getName()));
 
                     while (resultSet.next()) {
                         String chat = "";
-                        chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType"));
+                        chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType")); //TODO: Make a method to translate this.
                         chat += ": ";
                         chat += resultSet.getString("time");
                         chat += " ";
@@ -48,7 +48,7 @@ public class EventHelper {
                         Chat.showMessage(event.getEntityPlayer(), chat);
                         event.setCanceled(true);
                     }
-                    WorldHistory.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());
+                    WorldHistory.instance.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());
                 } catch (SQLException e) {
                     Log.error(e);
                 }

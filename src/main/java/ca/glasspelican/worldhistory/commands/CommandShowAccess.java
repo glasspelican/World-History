@@ -52,7 +52,7 @@ public class CommandShowAccess extends CommandBase {
         if (args.length > 0) {
             entries = Integer.parseInt(args[0]);
         }
-        WorldHistory.addUserToNotLogList(sender.getName(), entries);
+        WorldHistory.instance.addUserToNotLogList(sender.getName(), entries);
         Chat.showMessage(sender, "You can now right click on a block that you want info about");
     }
 
