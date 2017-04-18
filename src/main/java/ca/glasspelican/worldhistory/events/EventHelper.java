@@ -45,7 +45,7 @@ public class EventHelper {
                         chat += " ";
                         chat += resultSet.getString("user");
 
-                        Chat.showMessage(event.getEntityPlayer(),chat);
+                        Chat.showMessage(event.getEntityPlayer(), chat);
                         event.setCanceled(true);
                     }
                     WorldHistory.instance.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());

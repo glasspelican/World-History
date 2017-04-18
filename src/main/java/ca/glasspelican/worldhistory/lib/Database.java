@@ -12,9 +12,21 @@ public class Database {
 
     private Map<Integer, String> actionTypes = new HashMap<>();
 
+    /**
+     * create the mysql database connection
+     *
+     * @param hostName
+     * @param userName
+     * @param password
+     * @param dbName
+     * @throws SQLException
+     */
+    //
     public Database(String hostName, String userName, String password, String dbName) throws SQLException {
 
         String url = "jdbc:mysql://" + hostName + ":3306/" + dbName;
+
+        Log.info("Connecting to mysql database: " + url);
         try {
             con = DriverManager.getConnection(url, userName, password);
 
@@ -25,6 +37,32 @@ public class Database {
         }
     }
 
+
+    /**
+     * create and connect to the embedded h2database
+     *
+     * @param worldPath
+     * @param dbName
+     * @throws SQLException
+     */
+    public Database(String worldPath, String dbName) throws SQLException {
+
+        String url = "jdbc:h2:" + worldPath + dbName + ".db";
+
+        Log.info("Connecting to embedded database: " + url);
+        try {
+            con = DriverManager.getConnection(url);
+
+            st = con.createStatement();
+        } catch (SQLException e) {
+            Log.error(e);
+            throw e;
+        }
+    }
+
+    /**
+     * read the list of available events from the database
+     */
     public void updateActionTypes() {
         actionTypes.clear();
         try {
@@ -39,23 +77,34 @@ public class Database {
         }
     }
 
-    public String getActionType(int index) {
+    /**
+     * convert event id to event name
+     *
+     * @param id
+     * @return
+     */
+    public String getActionType(int id) {
         if (actionTypes.size() == 0) {
             updateActionTypes();
         }
-        return actionTypes.get(index);
+        return actionTypes.get(id);
     }
 
 
-    public ResultSet getQuery(String SQLQuery) throws SQLException {
-        return st.executeQuery(SQLQuery);
+    public ResultSet getQuery(String query) throws SQLException {
+        return st.executeQuery(query);
     }
 
-    public boolean query(String SQLQuery) throws SQLException {
-        return st.execute(SQLQuery);
+    public boolean query(String query) throws SQLException {
+        return st.execute(query);
     }
 
-    public boolean insert(String table, List<Object> values) {
+    /**
+     * @param table
+     * @param values
+     * @return
+     */
+    public void insert(String table, List<Object> values) {
 
         StringBuilder q = new StringBuilder("INSERT INTO " + table + " VALUES (?");
 
@@ -73,9 +122,11 @@ public class Database {
         } catch (SQLException e) {
             Log.error(e);
         }
-        return false;
     }
 
+    /**
+     * close the database connection
+     */
     public void close() {
         try {
             con.close();

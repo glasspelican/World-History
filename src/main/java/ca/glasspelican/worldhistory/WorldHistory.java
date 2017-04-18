@@ -11,7 +11,10 @@ import ca.glasspelican.worldhistory.lib.config.ModInfo;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -52,20 +55,14 @@ public class WorldHistory {
 
 
     @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-
-    }
-
-    @EventHandler
-    public void onServerStart(FMLServerStartingEvent event) {
-
-        Commands.init(event);
-    }
-
-    @EventHandler
     public void serverStart(FMLServerStartingEvent event) throws SQLException {
+        Commands.init(event);
 
-        sqlConn = new Database(Config.getString("host"), Config.getString("username"), Config.getString("password"), Config.getString("database"));
+        if (Config.getBool("useEmbeddedDatabase")) {
+            sqlConn = new Database(event.getServer().getDataDirectory().getAbsolutePath() + "/world/", ModInfo.ID);
+        } else {
+            sqlConn = new Database(Config.getString("host"), Config.getString("username"), Config.getString("password"), Config.getString("database"));
+        }
     }
 
     @EventHandler
