@@ -3,8 +3,8 @@ package ca.glasspelican.worldhistory;
 
 import ca.glasspelican.worldhistory.commands.Commands;
 import ca.glasspelican.worldhistory.events.EventHelper;
+import ca.glasspelican.worldhistory.lib.Database;
 import ca.glasspelican.worldhistory.lib.Log;
-import ca.glasspelican.worldhistory.lib.MySQL;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import ca.glasspelican.worldhistory.lib.config.ConfigHandler;
 import ca.glasspelican.worldhistory.lib.config.ModInfo;
@@ -29,10 +29,10 @@ import java.util.Map;
 public class WorldHistory {
     @Instance(value = ModInfo.ID)
     public static WorldHistory instance;
-    private static MySQL sqlConn;
+    private static Database sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<>();
 
-    public static MySQL getSqlConn() {
+    public static Database getSqlConn() {
         return sqlConn;
     }
 
@@ -65,7 +65,7 @@ public class WorldHistory {
     @EventHandler
     public void serverStart(FMLServerStartingEvent event) throws SQLException {
 
-        sqlConn = new MySQL(Config.getString("host"), Config.getString("username"), Config.getString("password"), Config.getString("database"));
+        sqlConn = new Database(Config.getString("host"), Config.getString("username"), Config.getString("password"), Config.getString("database"));
     }
 
     @EventHandler

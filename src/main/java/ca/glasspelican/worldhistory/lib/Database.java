@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MySQL {
+public class Database {
 
     private Connection con = null;
     private Statement st = null;
 
     private Map<Integer, String> actionTypes = new HashMap<>();
 
-    public MySQL(String hostName, String userName, String password, String dbName) throws SQLException {
+    public Database(String hostName, String userName, String password, String dbName) throws SQLException {
 
         String url = "jdbc:mysql://" + hostName + ":3306/" + dbName;
         try {
