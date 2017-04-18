@@ -39,7 +39,7 @@ public class EventHelper {
 
                     while (resultSet.next()) {
                         String chat = "";
-                        chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType")); //TODO: Make a method to translate this.
+                        chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType"));
                         chat += ": ";
                         chat += resultSet.getString("time");
                         chat += " ";
