@@ -1,0 +1,21 @@
+[
+  {
+    "modid": "worldhistory",
+    "name": "World History",
+    "description": "",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Glasspelican",
+      "K4unl"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [
+      "Forge"
+    ]
+  }
+]

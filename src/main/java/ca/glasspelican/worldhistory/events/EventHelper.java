@@ -29,9 +29,9 @@ public class EventHelper {
     }
 
     @SubscribeEvent
-    public void PlayerInteractEvent(PlayerInteractEvent event) {
+    public void PlayerInteractEvent(PlayerInteractEvent.RightClickBlock event) {
         //4
-        if ((event instanceof PlayerInteractEvent.RightClickBlock) && !event.getWorld().isRemote) {
+        if (!event.getWorld().isRemote) {
             if (WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getGameProfile().getName()) > 0) {
                 try {
                     ResultSet resultSet = WorldHistory.getSqlConn().getQuery("SELECT * FROM `events` WHERE `x`='" + event.getPos().getX() + "' AND `y`='" + event.getPos().getY() + "' AND `z`='"

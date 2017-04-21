@@ -1,5 +1,8 @@
 package ca.glasspelican.worldhistory.lib;
 
+import ca.glasspelican.worldhistory.lib.tables.EnumEventTypes;
+import ca.glasspelican.worldhistory.lib.tables.EventLog;
+
 import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,8 @@ public class Database {
             con = DriverManager.getConnection(url, userName, password);
 
             st = con.createStatement();
+
+            this.init();
         } catch (SQLException e) {
             Log.error(e);
             throw e;
@@ -47,17 +52,29 @@ public class Database {
      */
     public Database(String worldPath, String dbName) throws SQLException {
 
-        String url = "jdbc:h2:" + worldPath + dbName + ".db";
+        String url = "jdbc:h2:" + worldPath + dbName;
 
         Log.info("Connecting to embedded database: " + url);
         try {
             con = DriverManager.getConnection(url);
 
             st = con.createStatement();
+
+            this.init();
         } catch (SQLException e) {
             Log.error(e);
             throw e;
         }
+    }
+
+    private void init() throws SQLException {
+        this.query(EnumEventTypes.getTableStructure());
+        try {
+            this.query(EnumEventTypes.getTable());
+        } catch (SQLException e) {
+            //we already have this
+        }
+        this.query(EventLog.getInitQuery());
     }
 
     /**
@@ -96,6 +113,7 @@ public class Database {
     }
 
     public boolean query(String query) throws SQLException {
+        Log.info(query);
         return st.execute(query);
     }
 
@@ -105,14 +123,14 @@ public class Database {
      * @return
      */
     public void insert(String table, List<Object> values) {
+        try {
+            String q = "INSERT INTO " + table + " VALUES (?";
 
-        StringBuilder q = new StringBuilder("INSERT INTO " + table + " VALUES (?");
+            for (int i = 1; i < values.size(); i++) {
+                q += ",?";
+            }
+            PreparedStatement ps = con.prepareStatement(q + ")");
 
-        for (Object ignored : values) q.append(",?");
-
-        q.append(")");
-
-        try (PreparedStatement ps = con.prepareStatement(q.toString())) {
             int count = 1;
             for (Object value : values) {
                 ps.setObject(count, value);

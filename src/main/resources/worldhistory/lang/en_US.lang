@@ -1,0 +1,4 @@
+event.worldhistory.blockbreak=Block Break
+event.worldhistory.tilebreak=TileEntity Break
+event.worldhistory.inventoryopen=Inventory Open
+event.worldhistory.blockright=Block Rightclick
