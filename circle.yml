@@ -12,7 +12,7 @@ database:
 
 compile:
     override:
-        - ./gradlew assemble
+        - ./gradlew assemble shadowjar
 
 general:
     artifacts:

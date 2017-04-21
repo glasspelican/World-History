@@ -6,6 +6,7 @@ public class Commands {
 
 
     public static void init(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandShowAccess());
+        if(event.getSide().isServer())
+            event.registerServerCommand(new CommandShowAccess());
     }
 }

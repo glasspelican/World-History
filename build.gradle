@@ -17,11 +17,13 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
+        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: "com.github.johnrengelman.shadow"
 
 project.ext {
     buildNum = System.getenv("CIRCLE_BUILD_NUM")
@@ -69,6 +71,9 @@ curseforge {
         id = '265169'
         releaseType = project.ext.curseRelease
         changelog = getLastCommit()
+        mainArtifact shadowJar
+        addArtifact jar
+        addArtifact sourceJar
     }
 }
 
