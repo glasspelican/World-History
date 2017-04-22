@@ -27,7 +27,7 @@ apply plugin: "com.github.johnrengelman.shadow"
 
 project.ext {
     buildNum = System.getenv("CIRCLE_BUILD_NUM")
-    mcVersion = "1.10.2"
+    mcVersion = "1.11.2"
     curseApiKey = System.getenv("CURSE_API_KEY") ?: ""
     curseRelease = System.getenv("CIRCLE_RELEASE_TYPE") ?: "alpha"
 }
@@ -57,12 +57,12 @@ compileJava {
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-12.18.3.2281"
+    version = "${project.ext.mcVersion}-13.20.0.2260"
     replace "@VERSION@", project.version
     replace "@BUILDNUM@", project.ext.buildNum
 
     runDir = "run"
-    mappings = "snapshot_20161111"
+    mappings = "snapshot_20161220"
 }
 
 curseforge {

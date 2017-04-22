@@ -22,19 +22,19 @@ public class CommandShowAccess extends CommandBase {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
 
         return "showaccess";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
 
         return "showaccess. Then right click with any tool on a block or TE to get the last 10 events on that location.";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
 
         return aliases;
     }

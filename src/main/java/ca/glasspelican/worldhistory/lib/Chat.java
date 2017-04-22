@@ -7,15 +7,15 @@ import net.minecraft.util.text.TextComponentString;
 public class Chat {
 
     public static void showMessage(EntityPlayer player, String message) {
-        player.addChatMessage(new TextComponentString(message));
+        player.sendMessage(new TextComponentString(message));
     }
 
     public static void showMessage(EntityPlayer player, TextComponentString string) {
-        player.addChatMessage(string);
+        player.sendMessage(string);
     }
 
     public static void showMessage(ICommandSender sender, String message) {
-        sender.addChatMessage(new TextComponentString(message));
+        sender.sendMessage(new TextComponentString(message));
     }
 
 }
