@@ -47,7 +47,7 @@ archivesBaseName = "worldHistory"
 
 dependencies {
     compile "mysql:mysql-connector-java:6.0.6"
-    compile 'com.h2database:h2:1.4.194'
+    compile 'com.h2database:h2:1.4.195'
     testCompile 'junit:junit:4.12'
 }
 
