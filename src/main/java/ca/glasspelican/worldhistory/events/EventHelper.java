@@ -20,38 +20,30 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class EventHelper {
-
+public class EventHelper implements Runnable {
+    private static LinkedBlockingDeque<PlayerInteractEvent> eventQue = new LinkedBlockingDeque<>();
+    private static AtomicBoolean run = new AtomicBoolean(false);
 
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new EventHelper());
+        run.set(true);
+        new Thread(new EventHelper()).start();
+    }
+
+    public static void stop() {
+        run.set(false);
     }
 
     @SubscribeEvent
     public void PlayerInteractEvent(PlayerInteractEvent.RightClickBlock event) {
         //4
-        if (!event.getWorld().isRemote) {
+        if (event.getSide().isServer()) {
             if (WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getGameProfile().getName()) > 0) {
-                try {
-                    ResultSet resultSet = WorldHistory.getSqlConn().getQuery("SELECT * FROM `events` WHERE `x`='" + event.getPos().getX() + "' AND `y`='" + event.getPos().getY() + "' AND `z`='"
-                            + event.getPos().getZ() + "' " + "AND `dimensionID`='" + event.getWorld().provider.getDimension() + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getName()));
-
-                    while (resultSet.next()) {
-                        String chat = "";
-                        chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType"));
-                        chat += ": ";
-                        chat += resultSet.getString("time");
-                        chat += " ";
-                        chat += resultSet.getString("user");
-
-                        Chat.showMessage(event.getEntityPlayer(), chat);
-                        event.setCanceled(true);
-                    }
-                    WorldHistory.instance.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());
-                } catch (SQLException e) {
-                    Log.error(e);
-                }
+                eventQue.offer(event);
+                event.setCanceled(true);
             } else {
 
                 BlockEvent(
@@ -92,7 +84,45 @@ public class EventHelper {
         values.add(currentTimestamp);
         values.add(blockName);
 
-        WorldHistory.getSqlConn().insert("events", values);
+        WorldHistory.getSqlConn().asycInsert("events", values);
+    }
+
+    private void QueryBlockHistory(PlayerInteractEvent event) {
+        try {
+            ResultSet resultSet = WorldHistory.getSqlConn().getQuery("SELECT * FROM `events` WHERE `x`='" + event.getPos().getX() + "' AND `y`='" + event.getPos().getY() + "' AND `z`='"
+                    + event.getPos().getZ() + "' " + "AND `dimensionID`='" + event.getWorld().provider.getDimension() + "' ORDER BY `id` DESC LIMIT " + WorldHistory.instance.isUserOnNotLogList(event.getEntityPlayer().getName()));
+
+            while (resultSet.next()) {
+                String chat = "";
+                chat += WorldHistory.getSqlConn().getActionType(resultSet.getInt("eventType"));
+                chat += ": ";
+                chat += resultSet.getString("time");
+                chat += " ";
+                chat += resultSet.getString("user");
+
+                Chat.showMessage(event.getEntityPlayer(), chat);
+            }
+            WorldHistory.instance.removeUserFromNotLogList(event.getEntityPlayer().getGameProfile().getName());
+        } catch (SQLException e) {
+            Log.error(e);
+        }
+    }
+
+    @Override
+    public void run() {
+        Log.info("Starting Event Thread");
+
+        PlayerInteractEvent interactEvent;
+
+        while (run.get()) {
+            try {
+                interactEvent = eventQue.take();
+                QueryBlockHistory(interactEvent);
+            } catch (Exception e) {
+                Log.error(e);
+                break;
+            }
+        }
     }
 
 
