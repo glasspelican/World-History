@@ -17,19 +17,22 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
-        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: "com.github.johnrengelman.shadow"
 
 project.ext {
     buildNum = System.getenv("CIRCLE_BUILD_NUM")
     mcVersion = "1.10.2"
     curseApiKey = System.getenv("CURSE_API_KEY") ?: ""
     curseRelease = System.getenv("CIRCLE_RELEASE_TYPE") ?: "alpha"
+}
+
+configurations {
+    shade
+    compileOnly.extendsFrom shade
 }
 
 def getLastCommit = { ->
@@ -46,8 +49,8 @@ group = "ca.glasspelican.worldhistory"
 archivesBaseName = "worldHistory"
 
 dependencies {
-    compile "mysql:mysql-connector-java:6.0.6"
-    compile 'com.h2database:h2:1.4.195'
+    shade "mysql:mysql-connector-java:6.0.6"
+    shade 'com.h2database:h2:1.4.195'
     testCompile 'junit:junit:4.12'
 }
 
@@ -71,9 +74,16 @@ curseforge {
         id = '265169'
         releaseType = project.ext.curseRelease
         changelog = getLastCommit()
-        mainArtifact shadowJar
-        addArtifact jar
+        mainArtifact jar
         addArtifact sourceJar
+    }
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
     }
 }
 
