@@ -16,7 +16,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.9"
     }
 }
 
@@ -50,17 +50,17 @@ archivesBaseName = "worldHistory"
 
 dependencies {
     shade "mysql:mysql-connector-java:6.0.6"
-    shade 'com.h2database:h2:1.4.195'
+    shade 'com.h2database:h2:1.4.196'
     testCompile 'junit:junit:4.12'
 }
 
-sourceCompatibility = targetCompatibility = "1.7"
+sourceCompatibility = targetCompatibility = "1.8"
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.7"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-13.20.0.2260"
+    version = "${project.ext.mcVersion}-13.20.1.2429"
     replace "@VERSION@", project.version
     replace "@BUILDNUM@", project.ext.buildNum
 
