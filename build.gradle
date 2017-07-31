@@ -54,13 +54,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-sourceCompatibility = targetCompatibility = "1.7"
+sourceCompatibility = targetCompatibility = "1.8"
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.7"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-12.18.3.2281"
+    version = "${project.ext.mcVersion}-12.18.3.2422"
     replace "@VERSION@", project.version
     replace "@BUILDNUM@", project.ext.buildNum
 
