@@ -78,11 +78,7 @@ public class WorldHistory {
     }
 
     public int isUserOnNotLogList(String displayName) {
-        if (doNotLogList.containsKey(displayName)) {
-            return doNotLogList.get(displayName);
-        } else {
-            return 0;
-        }
+        return doNotLogList.getOrDefault(displayName, 0);
     }
 
     public void removeUserFromNotLogList(String name) {
