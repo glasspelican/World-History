@@ -2,6 +2,18 @@ package ca.glasspelican.worldhistory.lib;
 
 import ca.glasspelican.worldhistory.lib.tables.EnumEventTypes;
 import ca.glasspelican.worldhistory.lib.tables.EventLog;
+import net.minecraft.client.Minecraft;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.MinecraftError;
+import net.minecraft.util.ReportedException;
+import net.minecraft.world.MinecraftException;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLStateEvent;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -67,7 +79,8 @@ public class Database implements Runnable {
             this.init();
         } catch (SQLException e) {
             Log.error(e);
-            throw e;
+
+            throw new ReportedException(new CrashReport("Unable to Connect to embedded database",e));
         }
     }
 

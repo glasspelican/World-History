@@ -9,10 +9,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-public class CommandSetArea extends CommandBase {
+public class CommandSetTwo extends CommandBase{
     @Override
     public String getCommandName() {
-        return "setpointone";
+        return "setpointtwo";
     }
 
     @Override
@@ -23,7 +23,8 @@ public class CommandSetArea extends CommandBase {
     @Override
     public void execute(MinecraftServer minecraftServer, ICommandSender iCommandSender, String[] strings) throws CommandException {
 
-        WorldHistory.investigation = new Investigation(iCommandSender.getPosition());
+        WorldHistory.investigation.setEnd(iCommandSender.getPosition());
+        WorldHistory.investigation.getUsers(iCommandSender.getCommandSenderEntity());
 
     }
 

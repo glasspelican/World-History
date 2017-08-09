@@ -8,6 +8,7 @@ import ca.glasspelican.worldhistory.lib.Log;
 import ca.glasspelican.worldhistory.lib.config.Config;
 import ca.glasspelican.worldhistory.lib.config.ConfigHandler;
 import ca.glasspelican.worldhistory.lib.config.ModInfo;
+import ca.glasspelican.worldhistory.util.Investigation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -34,6 +35,8 @@ public class WorldHistory {
     public static WorldHistory instance;
     private static Database sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<>();
+
+    public static Investigation investigation;
 
     public static Database getSqlConn() {
         return sqlConn;
