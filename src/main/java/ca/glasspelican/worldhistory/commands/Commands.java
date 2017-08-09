@@ -9,7 +9,8 @@ import java.lang.reflect.InvocationTargetException;
 
 public enum Commands {
     COMMAND_SHOW_ACCESS(CommandShowAccess.class),
-    COMMAND_SET_AREA(CommandSetArea.class),;
+    COMMAND_SET_AREA(CommandSetArea.class),
+    COMMAND_SET_POINT(CommandSetTwo.class),;
 
     private final Class<? extends CommandBase> commandClass;
 

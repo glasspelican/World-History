@@ -2,7 +2,18 @@ package ca.glasspelican.worldhistory.lib;
 
 import ca.glasspelican.worldhistory.lib.tables.EnumEventTypes;
 import ca.glasspelican.worldhistory.lib.tables.EventLog;
-import scala.tools.nsc.Global;
+import net.minecraft.client.Minecraft;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.MinecraftError;
+import net.minecraft.util.ReportedException;
+import net.minecraft.world.MinecraftException;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLStateEvent;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -13,9 +24,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Database implements Runnable {
 
-    private Connection con = null;
-    private Statement st = null;
-    private LinkedBlockingDeque<asyncQueObject> asyncInsertQue = new LinkedBlockingDeque();
+    private Connection connection = null;
+    private Statement statement = null;
+    private LinkedBlockingDeque<AsyncQueObject> asyncInsertQue = new LinkedBlockingDeque();
     private AtomicBoolean runAsyncThread = new AtomicBoolean(false);
 
     private Map<Integer, String> actionTypes = new HashMap<>();
@@ -36,9 +47,9 @@ public class Database implements Runnable {
 
         Log.info("Connecting to mysql database: " + url);
         try {
-            con = DriverManager.getConnection(url, userName, password);
+            connection = DriverManager.getConnection(url, userName, password);
 
-            st = con.createStatement();
+            statement = connection.createStatement();
 
             this.init();
         } catch (SQLException e) {
@@ -61,19 +72,20 @@ public class Database implements Runnable {
 
         Log.info("Connecting to embedded database: " + url);
         try {
-            con = DriverManager.getConnection(url);
+            connection = DriverManager.getConnection(url);
 
-            st = con.createStatement();
+            statement = connection.createStatement();
 
             this.init();
         } catch (SQLException e) {
             Log.error(e);
-            throw e;
+
+            throw new ReportedException(new CrashReport("Unable to Connect to embedded database",e));
         }
     }
 
     private Database(Connection connection) {
-        this.con = connection;
+        this.connection = connection;
     }
 
     private void init() throws SQLException {
@@ -86,7 +98,7 @@ public class Database implements Runnable {
         this.query(EventLog.getInitQuery());
 
         this.runAsyncThread.set(true);
-        new Thread(new Database(con)).start();
+        new Thread(new Database(connection)).start();
     }
 
     /**
@@ -122,12 +134,12 @@ public class Database implements Runnable {
 
     public ResultSet getQuery(String query) throws SQLException {
         Log.info(query);
-        return st.executeQuery(query);
+        return statement.executeQuery(query);
     }
 
     public boolean query(String query) throws SQLException {
         Log.info(query);
-        return st.execute(query);
+        return statement.execute(query);
     }
 
     /**
@@ -142,7 +154,7 @@ public class Database implements Runnable {
             for (int i = 1; i < values.size(); i++) {
                 q += ",?";
             }
-            PreparedStatement ps = con.prepareStatement(q + ")");
+            PreparedStatement ps = connection.prepareStatement(q + ")");
 
             int count = 1;
             for (Object value : values) {
@@ -158,7 +170,7 @@ public class Database implements Runnable {
     }
 
     public boolean asycInsert(String table, List<Object> values) {
-        return asyncInsertQue.offer(new asyncQueObject(table,values));
+        return asyncInsertQue.offer(new AsyncQueObject(table, values));
     }
 
     /**
@@ -167,7 +179,7 @@ public class Database implements Runnable {
     public void close() {
         Log.info("Closing Database connection");
         try {
-            con.close();
+            connection.close();
         } catch (SQLException e) {
             Log.error(e);
         }
@@ -175,11 +187,11 @@ public class Database implements Runnable {
 
     public void run() {
 
-        asyncQueObject queObject;
+        AsyncQueObject queObject;
         while (runAsyncThread.get()) {
             try {
                 queObject = asyncInsertQue.take();
-                this.insert(queObject.getString(),queObject.getList());
+                this.insert(queObject.getString(), queObject.getList());
             } catch (InterruptedException e) {
                 Log.error(e);
                 break;
@@ -187,11 +199,11 @@ public class Database implements Runnable {
         }
     }
 
-    private class asyncQueObject {
+    private class AsyncQueObject {
         String string;
         List<Object> object;
 
-        asyncQueObject(String string, List<Object> object){
+        AsyncQueObject(String string, List<Object> object) {
             this.string = string;
             this.object = object;
         }

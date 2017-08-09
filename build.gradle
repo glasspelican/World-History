@@ -33,6 +33,7 @@ project.ext {
 configurations {
     shade
     compileOnly.extendsFrom shade
+    runtimeClasspath.extendsFrom shade
 }
 
 def getLastCommit = { ->
