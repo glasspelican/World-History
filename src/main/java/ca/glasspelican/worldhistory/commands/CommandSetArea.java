@@ -11,12 +11,12 @@ import net.minecraft.server.MinecraftServer;
 
 public class CommandSetArea extends CommandBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "setpointone";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender iCommandSender) {
+    public String getUsage(ICommandSender iCommandSender) {
         return "setarea. set the start and stop points marking a location to investigate ";
     }
 
