@@ -2,17 +2,16 @@ package ca.glasspelican.worldhistory.commands;
 
 import ca.glasspelican.worldhistory.WorldHistory;
 import ca.glasspelican.worldhistory.lib.config.Config;
-import ca.glasspelican.worldhistory.util.Investigation;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-public class CommandSetArea extends CommandBase {
+public class CommandQuery extends CommandBase {
     @Override
     public String getCommandName() {
-        return "setpointone";
+        return "query";
     }
 
     @Override
@@ -23,7 +22,7 @@ public class CommandSetArea extends CommandBase {
     @Override
     public void execute(MinecraftServer minecraftServer, ICommandSender iCommandSender, String[] strings) throws CommandException {
 
-        WorldHistory.investigation = new Investigation(iCommandSender.getPosition());
+        WorldHistory.investigation.getUsers(iCommandSender.getCommandSenderEntity());
 
     }
 

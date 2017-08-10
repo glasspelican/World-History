@@ -1,19 +1,11 @@
 package ca.glasspelican.worldhistory.lib;
 
+import ca.glasspelican.worldhistory.WorldHistory;
 import ca.glasspelican.worldhistory.lib.tables.EnumEventTypes;
 import ca.glasspelican.worldhistory.lib.tables.EventLog;
-import net.minecraft.client.Minecraft;
+import ca.glasspelican.worldhistory.util.AsyncDatabase;
 import net.minecraft.crash.CrashReport;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.MinecraftError;
 import net.minecraft.util.ReportedException;
-import net.minecraft.world.MinecraftException;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLStateEvent;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -22,13 +14,13 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Database implements Runnable {
+public class Database {
 
+    private static final LinkedBlockingDeque<AsyncQueObject> asyncInsertQue = new LinkedBlockingDeque();
+    private static final AtomicBoolean runAsyncThread = new AtomicBoolean(true);
     private Connection connection = null;
     private Statement statement = null;
-    private LinkedBlockingDeque<AsyncQueObject> asyncInsertQue = new LinkedBlockingDeque();
-    private AtomicBoolean runAsyncThread = new AtomicBoolean(false);
-
+    private Thread asyncThread;
     private Map<Integer, String> actionTypes = new HashMap<>();
 
     /**
@@ -58,7 +50,6 @@ public class Database implements Runnable {
         }
     }
 
-
     /**
      * create and connect to the embedded h2database
      *
@@ -80,12 +71,16 @@ public class Database implements Runnable {
         } catch (SQLException e) {
             Log.error(e);
 
-            throw new ReportedException(new CrashReport("Unable to Connect to embedded database",e));
+            throw new ReportedException(new CrashReport("Unable to Connect to embedded database", e));
         }
     }
 
-    private Database(Connection connection) {
-        this.connection = connection;
+    public static LinkedBlockingDeque<AsyncQueObject> getAsyncInsertQue() {
+        return asyncInsertQue;
+    }
+
+    public static AtomicBoolean getRunAsyncThread() {
+        return runAsyncThread;
     }
 
     private void init() throws SQLException {
@@ -97,8 +92,8 @@ public class Database implements Runnable {
         }
         this.query(EventLog.getInitQuery());
 
-        this.runAsyncThread.set(true);
-        new Thread(new Database(connection)).start();
+        asyncThread = new Thread(new AsyncDatabase());
+
     }
 
     /**
@@ -169,7 +164,8 @@ public class Database implements Runnable {
         }
     }
 
-    public boolean asycInsert(String table, List<Object> values) {
+    public boolean asyncInsert(String table, List<Object> values) {
+        Log.info("AsyncInsert");
         return asyncInsertQue.offer(new AsyncQueObject(table, values));
     }
 
@@ -177,6 +173,20 @@ public class Database implements Runnable {
      * close the database connection
      */
     public void close() {
+        //cleanup worker thread
+        Database.getRunAsyncThread().set(false);
+        //write out que
+        for (AsyncQueObject queObject : Database.getAsyncInsertQue()) {
+            WorldHistory.getSqlConn().insert(queObject.getString(), queObject.getList());
+        }
+
+        try {
+            asyncThread.join();
+        } catch (InterruptedException e) {
+            Log.error(e);
+        }
+
+        //close database
         Log.info("Closing Database connection");
         try {
             connection.close();
@@ -185,36 +195,5 @@ public class Database implements Runnable {
         }
     }
 
-    public void run() {
-
-        AsyncQueObject queObject;
-        while (runAsyncThread.get()) {
-            try {
-                queObject = asyncInsertQue.take();
-                this.insert(queObject.getString(), queObject.getList());
-            } catch (InterruptedException e) {
-                Log.error(e);
-                break;
-            }
-        }
-    }
-
-    private class AsyncQueObject {
-        String string;
-        List<Object> object;
-
-        AsyncQueObject(String string, List<Object> object) {
-            this.string = string;
-            this.object = object;
-        }
-
-        public String getString() {
-            return string;
-        }
-
-        public List<Object> getList() {
-            return object;
-        }
-    }
 }
 

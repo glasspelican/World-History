@@ -33,10 +33,9 @@ import java.util.Map;
 public class WorldHistory {
     @Instance(value = ModInfo.ID)
     public static WorldHistory instance;
+    public static Investigation investigation;
     private static Database sqlConn;
     private static Map<String, Integer> doNotLogList = new HashMap<>();
-
-    public static Investigation investigation;
 
     public static Database getSqlConn() {
         return sqlConn;

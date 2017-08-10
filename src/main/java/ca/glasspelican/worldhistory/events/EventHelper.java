@@ -84,7 +84,7 @@ public class EventHelper implements Runnable {
         values.add(currentTimestamp);
         values.add(blockName);
 
-        WorldHistory.getSqlConn().asycInsert("events", values);
+        WorldHistory.getSqlConn().asyncInsert("events", values);
     }
 
     private void QueryBlockHistory(PlayerInteractEvent event) {

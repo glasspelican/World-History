@@ -64,6 +64,6 @@ public class CommandShowAccess extends CommandBase {
      */
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return !(sender instanceof EntityPlayerMP) || Config.isUserAMod(sender.getName());
+        return !(sender instanceof EntityPlayerMP) || Config.isUserAMod(sender);
     }
 }

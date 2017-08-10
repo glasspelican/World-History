@@ -1,5 +1,6 @@
 package ca.glasspelican.worldhistory.lib.config;
 
+import net.minecraft.command.ICommandSender;
 import net.minecraftforge.common.config.Configuration;
 
 import java.util.ArrayList;
@@ -55,9 +56,9 @@ public class Config {
         return "";
     }
 
-    public static boolean isUserAMod(String nick) {
+    public static boolean isUserAMod(ICommandSender sender) {
         for (String modUser : modUsers) {
-            if (modUser.equalsIgnoreCase(nick)) {
+            if (modUser.equalsIgnoreCase(sender.getName())) {
                 return true;
             }
         }
