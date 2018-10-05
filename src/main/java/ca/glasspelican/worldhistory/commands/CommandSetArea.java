@@ -10,6 +10,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 public class CommandSetArea extends CommandBase {
+    public CommandSetArea() {
+    }
+
     @Override
     public String getName() {
         return "setpointone";

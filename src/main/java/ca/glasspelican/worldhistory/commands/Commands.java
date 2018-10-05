@@ -5,12 +5,10 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-import java.lang.reflect.InvocationTargetException;
-
 public enum Commands {
-    COMMAND_SHOW_ACCESS(CommandShowAccess.class),
     COMMAND_SET_AREA(CommandSetArea.class),
-    COMMAND_SET_POINT(CommandSetTwo.class),;
+    COMMAND_SET_POINT(CommandSetTwo.class),
+    COMMAND_SHOW_ACCESS(CommandShowAccess.class);
 
     private final Class<? extends CommandBase> commandClass;
 
@@ -22,13 +20,13 @@ public enum Commands {
         if (event.getSide().isServer()) {
             for (Commands commands : Commands.values()) {
                 Class<? extends CommandBase> commandClass = commands.getCommandClass();
-                ICommand iCommand = null;
+                ICommand iCommand;
                 try {
-                    iCommand = commandClass.getConstructor(commandClass).newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    iCommand = commandClass.newInstance();
+                    event.registerServerCommand(iCommand);
+                } catch (InstantiationException | IllegalAccessException e) {
                     Log.error(e);
                 }
-                event.registerServerCommand(iCommand);
             }
         }
     }

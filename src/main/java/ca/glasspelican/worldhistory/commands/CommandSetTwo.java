@@ -2,14 +2,16 @@ package ca.glasspelican.worldhistory.commands;
 
 import ca.glasspelican.worldhistory.WorldHistory;
 import ca.glasspelican.worldhistory.lib.config.Config;
-import ca.glasspelican.worldhistory.util.Investigation;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-public class CommandSetTwo extends CommandBase{
+public class CommandSetTwo extends CommandBase {
+    public CommandSetTwo() {
+    }
+
     @Override
     public String getName() {
         return "setpointtwo";
