@@ -58,7 +58,7 @@ public class WorldHistory {
 
 
     @EventHandler
-    public void serverStart(FMLServerStartingEvent event) throws SQLException {
+    public static void serverStart(FMLServerStartingEvent event) throws SQLException {
         Commands.init(event);
 
         if (Config.getBool("useEmbeddedDatabase")) {
@@ -85,8 +85,6 @@ public class WorldHistory {
     }
 
     public void removeUserFromNotLogList(String name) {
-        if (doNotLogList.containsKey(name)) {
-            doNotLogList.remove(name);
-        }
+        doNotLogList.remove(name);
     }
 }
