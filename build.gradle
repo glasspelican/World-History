@@ -25,7 +25,7 @@ apply plugin: 'com.matthewprenger.cursegradle'
 
 project.ext {
     buildNum = System.getenv("CIRCLE_BUILD_NUM")
-    mcVersion = "1.12.1"
+    mcVersion = "1.12.2"
     curseApiKey = System.getenv("CURSE_API_KEY") ?: ""
     curseRelease = System.getenv("CIRCLE_RELEASE_TYPE") ?: "alpha"
 }
@@ -61,7 +61,7 @@ compileJava {
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-14.22.0.2446"
+    version = "${project.ext.mcVersion}-14.23.5.2768"
     replace "@VERSION@", project.version
     replace "@BUILDNUM@", project.ext.buildNum
 

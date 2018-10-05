@@ -14,7 +14,7 @@ jobs:
           name: Assemble
           command: ./gradlew assemble
       - store_artifacts:
-          path: ~/world-history/build/libs"
+          path: build/libs
     environment:
       TERM: dumb
 
