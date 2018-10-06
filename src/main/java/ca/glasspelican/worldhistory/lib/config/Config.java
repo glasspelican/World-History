@@ -22,7 +22,7 @@ public class Config {
     }
 
     public static void loadConfigOptions(Configuration c) {
-        modUsers = c.get(c.CATEGORY_GENERAL, "modUsers", new String[]{}).getStringList();
+        modUsers = c.get(Configuration.CATEGORY_GENERAL, "modUsers", new String[]{}).getStringList();
         for (configOption config : configOptions) {
             config.loadFromConfig(c);
         }

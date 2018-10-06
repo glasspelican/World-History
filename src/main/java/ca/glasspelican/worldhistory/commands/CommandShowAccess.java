@@ -2,17 +2,14 @@ package ca.glasspelican.worldhistory.commands;
 
 import ca.glasspelican.worldhistory.WorldHistory;
 import ca.glasspelican.worldhistory.lib.Chat;
-import ca.glasspelican.worldhistory.lib.config.Config;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandShowAccess extends CommandBase {
+public class CommandShowAccess extends ModCommandBase {
 
     private List<String> aliases;
 
@@ -56,14 +53,4 @@ public class CommandShowAccess extends CommandBase {
         Chat.showMessage(sender, "You can now right click on a block that you want info about");
     }
 
-    /**
-     * Check if the given ICommandSender has permission to execute this command
-     *
-     * @param server
-     * @param sender
-     */
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return !(sender instanceof EntityPlayerMP) || Config.isUserAMod(sender.getName());
-    }
 }
